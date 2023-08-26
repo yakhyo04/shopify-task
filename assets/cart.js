@@ -10,22 +10,24 @@ form.addEventListener('submit', async(e) => {
     let variant_count = document.querySelector('.productQuantity')
 
     const cartItem = {
-        id: Math.round(Math.random(10)*100)+1,
-        quantity: 1,
-        variants: selectedVariants
-    }
-
-    const selectVariants = (variantId) => {
-        if(selectedVariants.length < totalQuantity){
+        'items': [
+            {
+                id: Math.round(Math.random(10)*100)+1,
+                quantity: 1,
+                variants: selectedVariants
+            }
+        ]}
+    carts.push(cartItem)
+    const selectVariants = (variantId)=>{
+        if(selectedVariants.length<totalQuantity){
             selectedVariants.push(variantId)
         }else{
             alert('total variants added')
+            // activateAddToCard()
         }
     }
-    carts.push(cartItem)
     selectVariants(variant_id)
     console.log(carts)
-
     let formData = {
         'items': [
             {
@@ -38,10 +40,10 @@ form.addEventListener('submit', async(e) => {
     await fetch(window.Shopify.routes.root + 'cart/add.js', {
         method: 'POST',
         headers: {
-            'Accept': `application/json`,
+            dataType: 'json',
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify(cartItem)
+        body: cartItem
     }).then(res => {
         console.log(res)
         return res.json()
