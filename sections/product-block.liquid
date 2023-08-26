@@ -1,0 +1,141 @@
+{% assign collection = section.settings.collection %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css" />
+
+<script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
+
+<div class="xm-auto xpx-10" style="margin: 0 auto; padding: 0 2.5rem;">
+  <div>
+    <h3 class="xtext-4xl xtext-[#252f35]" style="font-size: 2.25rem; color: #252f35;">{{ section.settings.heading }}</h3>
+    <p class="xtext-lg xtext-[#303c43]" style="font-size: 1.125rem; color: #303c43;">{{ section.settings.description }}</p>
+  </div>
+  <div>
+    {% for block in section.blocks %}
+      <div>
+        <a href="{{ block.settings.collection.url | within: collection }}">
+          <img src="{{ block.settings.collection.featured_image.src | img_url: 'large' }}" alt="{{ block.settings.collection.featured_image.alt | escape }}">
+        </a>
+      </div>
+      <div>
+        <a href="{{ block.settings.collection.url | within: collection }}">
+          {{ block.settings.collection.title }}
+        </a>
+      </div>
+    {% endfor %}
+  </div>
+
+  <div class="swiper mySwiper3">
+    <div class="swiper-wrapper">
+      {% for product in collection.products %}
+        <div class="swiper-slide product__slide xrounded-3xl" style="border-radius: 1.5rem; display: flex; flex-direction: column; gap: 15px;">
+          {% unless product.available %}<br><strong>sold out</strong>
+          {% endunless %}
+          <a href="{{ product.url | within: collection }}">
+            <img
+              class="xw-full xrounded-3xl"
+              style="border-radius: 1.5rem; width: 100%; height: 230px; object-fit: cover;"
+              src="{{ product.featured_image.src | img_url: 'large' }}"
+              alt="{{ product.featured_image.alt | escape }}">
+          </a>
+          <a href="{{ product.url | within: collection }}">{{ product.title }}</a>
+          <p style="margin: 0;">{{ product.price | money }}</p>
+          <a class="checkout-button button full accent" href="{{ product.url | within: collection }}">Add to cart</a>
+        </div>
+      {% else %}
+        <p>no matches</p>
+      {% endfor %}
+    </div>
+    <div class="swiper-button-prev product-button-prev"></div>
+    <div class="swiper-button-next product-button-next"></div>
+  </div>
+
+  {% comment %} {% for coll in section.settings.collection_list %}
+  <a class="lists__link {% if collection.title == coll.title %}active{% endif %}" href="{{ coll.url }}">{{ coll.title }}</a>
+  {% endfor %} {% endcomment %}</div>
+
+<style>
+  {% comment %}
+    .product-button-next,
+    .product-button-prev {
+      display: none;
+    }
+    .product-button-next::after,
+    .product-button-prev::after {
+      font-size: 8px !important;
+      background-color: black;
+      color: white;
+      padding: 10px 12px;
+      border-radius: 50%;
+    }
+    .product-button-next:hover,
+    .product-button-prev:hover,
+    .swiper-wrapper:hover ~ .product-button-next,
+    .swiper-wrapper:hover ~ .product-button-prev {
+      display: block;
+    }
+  {% endcomment %}
+
+  .swiper-button-prev:after,
+  .swiper-rtl .swiper-button-next:after,
+  .swiper-button-next:after,
+  .swiper-rtl .swiper-button-prev:after {
+    color: #fff;
+    background-color: #000;
+    border-radius: 50%;
+    padding: 7px 10px;
+    font-size: 10px;
+  }
+</style>
+
+<script>
+  var swiper = new Swiper(".mySwiper3", {
+    loop: true,
+    slidesPerView: 2,
+    spaceBetween: 30,
+    navigation: {
+      nextEl: ".product-button-next",
+      prevEl: ".product-button-prev"
+    },
+    breakpoints: {
+      1025: {
+        freemode: true,
+        slidesPerView: 5
+      },
+      575: {
+        freemode: true,
+        slidesPerView: 2
+      }
+    }
+  });
+</script>
+
+{% schema %}
+  {
+    "name": "Products Block",
+    "settings": [
+      {
+        "type": "collection_list",
+        "id": "collection_list",
+        "label": "Collection List"
+      }, {
+        "type": "text",
+        "id": "heading",
+        "default": "Products",
+        "label": "Product Block Title"
+      }, {
+        "type": "text",
+        "id": "description",
+        "default": "Products Description",
+        "label": "Product Block Description"
+      }, {
+        "type": "collection",
+        "id": "collection",
+        "label": "Collection"
+      }
+    ],
+    "presets": [
+      {
+        "name": "Products Block"
+      }
+    ]
+  }
+{% endschema %}

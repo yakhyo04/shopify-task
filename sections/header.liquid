@@ -1,0 +1,230 @@
+{{ 'style.header.css' | asset_url | stylesheet_tag }}
+
+<header class="header">
+  <div class="header__logo--wrapper xp-4 xm-auto xpx-10">
+    {% comment %} <div class="header__logo"> {% endcomment %}
+    {% if section.settings.logo_position == 'left' %}
+      <div class="header__top--left">
+        <a href="/" class="header__heading--link">
+          {% if section.settings.logo != blank %}
+            {% assign image = section.settings.logo %}
+            {% assign image_size = section.settings.logo_width | append: 'x' %}
+            {% assign logo_height = section.settings.logo_width | divided_by: section.settings.logo.aspect_ratio %}
+            {{ section.settings.logo | image_url: width: section.settings.width | image_tag: 
+             class: 'header__heading--logo',
+             loading: 'lazy',
+             widths: '50, 100, 150, 200, 250, 300, 350, 400, 450, 500',
+             height: logo_height,
+             width: section.settings.logo_width,
+             alt: image.alt | default: shop.name | escape }}
+          {%- elsif section.settings.logo_text != blank -%}
+            <span class="h2 {{ section.settings.logo_text_transform }}">{{ section.settings.logo_text }}</span>
+          {%- else -%}
+            <span class="h2 {{ section.settings.logo_text_transform }}">{{ shop.name }}</span>
+          {%- endif -%}
+        </a>
+      </div>
+
+      <div class="header__menus--center">
+        {% for link in linklists.main-menu.links %}
+        {% assign child_list_handle = link.title | handleize %}
+        {% if linklists[child_list_handle].links != blank %}
+            <a href="{{ link.url }}">{{ link.title }}</a>
+            [{% for childlink in linklists[child_list_handle].links %}
+            <a href="{{ childlink.url }}">{{ childlink.title | escape }}</a>
+            {% endfor %}]
+        {% else %}
+            <a href="{{ link.url }}">{{ link.title }}</a>
+        {% endif %}
+        {% endfor %}
+    </div>
+    {% endif %}
+    {% if section.settings.logo_position == 'center' %}
+
+    <div class="header__menus--left">
+        {% for link in linklists.main-menu.links %}
+        {% assign child_list_handle = link.title | handleize %}
+        {% if linklists[child_list_handle].links != blank %}
+            <a href="{{ link.url }}">{{ link.title }}</a>
+            [{% for childlink in linklists[child_list_handle].links %}
+            <a href="{{ childlink.url }}">{{ childlink.title | escape }}</a>
+            {% endfor %}]
+        {% else %}
+            <a href="{{ link.url }}">{{ link.title }}</a>
+        {% endif %}
+        {% endfor %}
+    </div>
+
+      <div class="header__top--center">
+        <a href="/" class="header__heading--link">
+          {% if section.settings.logo != blank %}
+            {% assign image = section.settings.logo %}
+            {% assign image_size = section.settings.logo_width | append: 'x' %}
+            {% assign logo_height = section.settings.logo_width | divided_by: section.settings.logo.aspect_ratio %}
+            {{ section.settings.logo | image_url: width: section.settings.width | image_tag: 
+             class: 'header__heading--logo',
+             loading: 'lazy',
+             widths: '50, 100, 150, 200, 250, 300, 350, 400, 450, 500',
+             height: logo_height,
+             width: section.settings.logo_width,
+             alt: image.alt | default: shop.name | escape }}
+          {%- elsif section.settings.logo_text != blank -%}
+            <span class="h2 {{ section.settings.logo_text_transform }}">{{ section.settings.logo_text }}</span>
+          {%- else -%}
+            <span class="h2 {{ section.settings.logo_text_transform }}">{{ shop.name }}</span>
+          {%- endif -%}
+        </a>
+      </div>
+    {% endif %}
+    {% comment %} </div> {% endcomment %}
+    <div class="header__icons--wrapper">
+      <ul class="header__icons">
+        <li class="header__icon header__search--icon">
+          <a href="/search" class="header__icon--link">
+            {% render 'icon-search' %}
+          </a>
+        </li>
+        <li class="header__icon header__account--icon">
+          <a href="/account/login" class="header__icon--link">
+            {% render 'icon-account' %}
+          </a>
+        </li>
+        <li class="header__icon header__cart--icon">
+          <a href="/cart" class="header__icon--link xflex xgap-4">
+            {% render 'icon-cart' %}
+            <span class="cart-count">{{ cart.item_count }}</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</header>
+
+{% schema %}
+  {
+    "name": "Header",
+    "settings": [
+      {
+        "type": "image_picker",
+        "id": "logo",
+        "label": "Logo Image"
+      },
+      {
+        "type": "image_picker",
+        "id": "logo_mobile",
+        "label": "Logo Mobile Image"
+      },
+      {
+        "type": "image_picker",
+        "id": "logo_fixed",
+        "label": "Logo fixed"
+      },
+      {
+        "type": "textarea",
+        "id": "logo_text",
+        "label": "Logo textarea"
+      }, {
+        "type": "range",
+        "id": "logo_width",
+        "min": 50,
+        "max": 200,
+        "step": 5,
+        "unit": "px",
+        "label": "Logo width",
+        "default": 90
+      }, {
+        "type": "range",
+        "id": "logo_width_mobile",
+        "min": 50,
+        "max": 200,
+        "step": 5,
+        "unit": "px",
+        "label": "Logo Mobile Width",
+        "default": 50
+      }, {
+        "type": "range",
+        "id": "logo_width_fixed",
+        "min": 50,
+        "max": 200,
+        "step": 5,
+        "unit": "px",
+        "label": "Logo Fixed Width",
+        "default": 50
+      }, {
+        "type": "select",
+        "id": "logo_position",
+        "label": "Logo Position",
+        "default": "left",
+        "options": [
+          {
+            "value": "left",
+            "label": "Left"
+          }, {
+            "value": "center",
+            "label": "Center"
+          }
+        ]
+      }, {
+        "type": "range",
+        "id": "logo_font_size",
+        "label": "Font Size",
+        "min": 15,
+        "max": 30,
+        "step": 1,
+        "unit": "px",
+        "default": 30
+      }, {
+        "type": "select",
+        "id": "logo_font_weight",
+        "label": "Font Weight",
+        "default": "900",
+        "options": [
+          {
+            "value": "400",
+            "label": "400"
+          },
+          {
+            "value": "500",
+            "label": "500"
+          },
+          {
+            "value": "600",
+            "label": "600"
+          },
+          {
+            "value": "700",
+            "label": "700"
+          }, {
+            "value": "800",
+            "label": "800"
+          }, {
+            "value": "900",
+            "label": "900"
+          }
+        ]
+      }, {
+        "type": "select",
+        "id": "logo_text_transform",
+        "label": "Text transform",
+        "default": "uppercase",
+        "options": [
+          {
+            "value": "capitalize",
+            "label": "Capitalize"
+          }, {
+            "value": "uppercase",
+            "label": "Uppercase"
+          }, {
+            "value": "lowercase",
+            "label": "Lowercase"
+          }
+        ]
+      }, {
+        "type": "color",
+        "id": "logo_color",
+        "label": "Logo color",
+        "default": "#FFFFFF"
+      }
+    ]
+  }
+{% endschema %}

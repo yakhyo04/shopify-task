@@ -1,0 +1,57 @@
+{{ 'style.brands.css' | asset_url | stylesheet_tag }}
+
+<div class="brands">
+  <div>
+    <h3 class="brands__title">{{ section.settings.heading }}</h3>
+    <p class="brands__description">{{ section.settings.description }}</p>
+  </div>
+  <div class="brands__grid">
+    {% for item in section.blocks %}
+      <a href="{{ item.settings.image_url }}">
+        <img src="{{ item.settings.image | img_url: 'medium' }}" alt="image">
+      </a>
+    {% endfor %}
+  </div>
+</div>
+
+{% schema %}
+  {
+    "name": "Brands",
+    "settings": [
+      {
+        "type": "text",
+        "id": "heading",
+        "default": "Heading",
+        "label": "Heading"
+      }, {
+        "type": "text",
+        "id": "description",
+        "default": "Description",
+        "label": "Description"
+      }
+    ],
+    "blocks": [
+      {
+        "type": "brands_box",
+        "name": "Brands Box",
+        "settings": [
+          {
+            "type": "image_picker",
+            "id": "image",
+            "label": "Image"
+          }, {
+            "type": "url",
+            "id": "image_url",
+            "default": "/",
+            "label": "Link To"
+          }
+        ]
+      }
+    ],
+    "presets": [
+      {
+        "name": "Brands"
+      }
+    ]
+  }
+{% endschema %}

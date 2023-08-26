@@ -1,0 +1,139 @@
+<div class="bundle_products"> 
+  <ul> 
+    {% for product in collections.all.products %}
+    <li class="bundle-item" data-id="{{product.first_available_variant.id}}">
+      <div class="img"> 
+        <img src="{{  product.featured_image | img_url: '100' | format: 'jpg' }}" alt="{{ block.settings.slide_heading }}">           
+      </div>
+      <div class="product_content">
+        <h3>{{ product.title }}</h3>
+        <h4>{{ product.price | money | remove: '.00' }}</h4> 
+      </div>
+    </li> 
+    {% endfor %} 
+    
+    <li class="bundle-item active" style="display: none;" data-id="{{product.first_available_variant.id}}"></li>
+  </ul>  
+</div><!-- #bundle Products -->
+
+ 
+<script>
+$( document ).ready(function() { 
+  ///add active class to current select
+  $(".bundle_products .bundle-item").click(function() {
+     $(this).toggleClass('active');  
+});
+   
+  //submit form button
+  $(".product-form__cart-submit").click(function(event) {
+   event.preventDefault();  
+    
+    var arr = [];
+   i = 0;
+   $('.bundle_products .bundle-item.active').each(function(){ 
+     arr[i++] = $(this).attr('data-id');
+        });
+  // console.log(arr);
+   var newstr = [arr.join(',')];
+  // console.log(newstr); 
+   //alert(arr);
+   
+    var newvalue = newstr;
+    
+	Shopify.queue = [];
+	  var quantity =1;
+	  var newArray = newvalue.toString().split(',');
+	  for (var i = 0; i < newArray.length; i++) {
+	    product = newArray[i];
+	    Shopify.queue.push({
+	      variantId: product,
+	    });
+          }
+     
+    
+	  Shopify.moveAlong = function() {
+	  // If we still have requests in the queue, let's process the next one.
+	  if (Shopify.queue.length) {
+	    var request = Shopify.queue.shift();
+	    var data = 'id='+ request.variantId + '&quantity=1'
+	    $.ajax({
+	      type: 'POST',
+              url: '/cart/add.js',
+	      dataType: 'json',
+	      data: data,
+	      success: function(res){
+	        Shopify.moveAlong();
+            
+            //submit form after sucess 
+               setTimeout(function(){
+                  // $('.product-form').submit();
+                 window.location.href = "/cart";
+               }, 1500);
+              
+            
+	     },
+             error: function(){
+	     // if it's not last one Move Along else update the cart number with the current quantity
+		  
+	      }
+           });
+        }
+	 // If the queue is empty, we add 1 to cart
+	/*else {
+	  quantity += 1;
+	  addToCartOk(quantity);
+	 } */
+        
+       };
+    Shopify.moveAlong();
+  
+    
+    }); 
+    });
+</script>
+
+
+<style>
+.bundle_products {
+    margin-top: 30px;
+}  
+.bundle_products li.bundle-item {
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 30px;
+    padding-left: 30px;
+    position: relative;
+    cursor: pointer;
+}
+
+.bundle_products li.bundle-item:before {
+    content: '';
+    position: absolute;
+    width: 15px;
+    height: 15px;
+    border: 1px solid #712a2a;
+    left: 0; 
+    top: 2px;
+    border-radius: 3px;
+}
+.bundle_products li.bundle-item.active:before { 
+    background-color: #712a2a; 
+}
+  
+.bundle_products li.bundle-item .img {
+    width: 100px;
+}
+.bundle_products li.bundle-item .product_content {
+    padding-left: 15px;
+    width: calc(100% - 100px);
+}
+.bundle_products li.bundle-item h3 {
+    font-size: 19px;
+    font-weight: 400;
+    margin-bottom: 10px;
+}
+.bundle_products li.bundle-item h4 {
+    font-weight: 400;
+    font-size: 15px;
+}
+</style>

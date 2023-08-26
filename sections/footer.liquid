@@ -1,0 +1,228 @@
+{{ 'style.footer.css' | asset_url | stylesheet_tag }}
+
+<footer class="footer">
+  <div class="width">
+    <div class="footer-top">
+      {% for block in section.blocks %}
+        {% if block.type == 'navigation' %}
+          <div class="footer-column footer-column--nav">
+            <h2>{{ block.settings.linklist.title }}</h2>
+            {% for link in block.settings.linklist.links %}
+              <li>
+                <a href="{{ link.url }}">{{ link.title }}</a>
+              </li>
+            {% endfor %}
+          </div>
+        {% elsif block.type == 'newsletter' %}
+          <div class="footer-column footer-column--news">
+            <h2>{{ block.settings.heading }}</h2>
+            {{ block.settings.text }}
+            {% form 'customer', id: 'footer-newsletter' %}
+              {% if form.posted_successfully? %}
+                <p class="footer-column-news-message">You've been subscribed!</p>
+              {% endif %}
+
+              {% if form.errors %}
+                <p class="footer-column-news-message">{{ form.errors.messages.email }}</p>
+              {% endif %}
+
+              <input
+                type="hidden"
+                name="contact[tags]"
+                value="newsletter">
+              <input
+                type="email"
+                name="contact[email]"
+                placeholder="Email address">
+              <button type="submit">Subscribe</button>
+            {% endform %}
+          </div>
+        {% elsif block.type == 'text' %}
+          <div class="footer-column footer-column--text">
+            <h2>{{ block.settings.heading }}</h2>
+            {{ block.settings.text }}
+          </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+    <div class="footer-bottom">
+      <p class="footer-copyright">{{ section.settings.copyright }}</p>
+
+      {% comment %} <ul class="footer-cards">
+      <li>{% render 'icon-visa' %}</li>
+      <li>{% render 'icon-visa' %}</li>
+      <li>{% render 'icon-visa' %}</li>
+      <li>{% render 'icon-visa' %}</li>
+      <li>{% render 'icon-visa' %}</li>
+      <li>{% render 'icon-visa' %}</li>
+      </ul> {% endcomment %}
+
+      <ul class="footer-cards">
+        {% assign payment_string = 'visa,master,maestro,american_express,apple_pay,bitcoin,dankort,diners_club,discover,paypal,dogecoin,dwolla,forbrugsforeningen,jcb,litecoin,afterpay,google_pay,ideal,klarna,klarna-pay-later,shopify_pay,sofort' %}
+        {% assign methods = payment_string | split: ',' %}
+        {%- for method in methods -%}
+          {%- assign show_current_method = method | prepend: 'show_payment_' -%}
+          {% if section.settings[show_current_method] %}
+            <li class="list-payment__item {{method}}">
+              {{ method | payment_type_svg_tag: class: 'icon icon--full-color' }}
+            </li>
+          {% endif %}
+        {%- endfor -%}
+      </ul>
+    </div>
+  </div>
+</footer>
+
+{% schema %}
+  {
+    "name": "Footer",
+    "settings": [
+      {
+        "type": "text",
+        "id": "copyright",
+        "label": "Copyright Text"
+      },
+      {
+        "type": "header",
+        "content": "content"
+      },
+      {
+        "id": "show_payment",
+        "type": "checkbox",
+        "default": true,
+        "label": "show_payment"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_payment_visa",
+        "label": "Visa"
+      }, {
+        "type": "checkbox",
+        "id": "show_payment_master",
+        "label": "Master"
+      }, {
+        "type": "checkbox",
+        "id": "show_payment_maestro",
+        "label": "Maestro"
+      }, {
+        "type": "checkbox",
+        "id": "show_payment_american_express",
+        "label": "American Express"
+      }, {
+        "type": "checkbox",
+        "id": "show_payment_apple_pay",
+        "label": "Apple Pay"
+      }, {
+        "type": "checkbox",
+        "id": "show_payment_bitcoin",
+        "label": "Bitcoin"
+      }, {
+        "type": "checkbox",
+        "id": "show_payment_dankort",
+        "label": "Dankort"
+      }, {
+        "type": "checkbox",
+        "id": "show_payment_diners_club",
+        "label": "Diners Club"
+      }, {
+        "type": "checkbox",
+        "id": "show_payment_discover",
+        "label": "Discover"
+      }, {
+        "type": "checkbox",
+        "id": "show_payment_paypal",
+        "label": "Paypal"
+      }, {
+        "type": "checkbox",
+        "id": "show_payment_dogecoin",
+        "label": "Dogecoin"
+      }, {
+        "type": "checkbox",
+        "id": "show_payment_dwolla",
+        "label": "Dwolla"
+      }, {
+        "type": "checkbox",
+        "id": "show_payment_forbrugsforeningen",
+        "label": "Forbrugsforeningen"
+      }, {
+        "type": "checkbox",
+        "id": "show_payment_jcb",
+        "label": "JCB"
+      }, {
+        "type": "checkbox",
+        "id": "show_payment_litecoin",
+        "label": "Litecoin"
+      }, {
+        "type": "checkbox",
+        "id": "show_payment_afterpay",
+        "label": "Afterpay"
+      }, {
+        "type": "checkbox",
+        "id": "show_payment_google_pay",
+        "label": "Googlepay"
+      }, {
+        "type": "checkbox",
+        "id": "show_payment_ideal",
+        "label": "Ideal"
+      }, {
+        "type": "checkbox",
+        "id": "show_payment_klarna",
+        "label": "Klarna"
+      }, {
+        "type": "checkbox",
+        "id": "show_payment_klarna-pay-later",
+        "label": "Klarnapay Later"
+      }, {
+        "type": "checkbox",
+        "id": "show_payment_shopify_pay",
+        "label": "Shopifypay"
+      }, {
+        "type": "checkbox",
+        "id": "show_payment_sofort",
+        "label": "Sofort"
+      }
+    ],
+    "max_blocks": 5,
+    "blocks": [
+      {
+        "name": "Newsletter",
+        "type": "newsletter",
+        "settings": [
+          {
+            "type": "text",
+            "id": "heading",
+            "label": "Heading Text"
+          }, {
+            "type": "richtext",
+            "id": "text",
+            "label": "Body Text"
+          }
+        ]
+      }, {
+        "name": "Text",
+        "type": "text",
+        "settings": [
+          {
+            "type": "text",
+            "id": "heading",
+            "label": "Heading text"
+          }, {
+            "type": "richtext",
+            "id": "text",
+            "label": "Body text"
+          }
+        ]
+      }, {
+        "name": "Navigation column",
+        "type": "navigation",
+        "settings": [
+          {
+            "type": "link_list",
+            "id": "linklist",
+            "label": "Navigation menu"
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}

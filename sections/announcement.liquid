@@ -1,0 +1,87 @@
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css" />
+
+<script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
+<div class="swiper mySwiper">
+  <div class="swiper-wrapper">
+    {% for announcement in section.blocks %}
+      <div class="swiper-slide announcement__text xm-auto xpx-10 xpy-2" href="/{{ announcement.settings.link }}">{{ announcement.settings.text }}</div>
+    {% endfor %}
+  </div>
+  <div class="swiper-button-prev swiper-button-prev1"></div>
+  <div class="swiper-button-next swiper-button-next1"></div>
+</div>
+
+<style>
+  .swiper {
+    width: 100%;
+    height: 100%;
+  }
+  .announcement__text {
+    text-align: center;
+    color: {{ section.settings.text_color }}
+    ;
+  }
+  .mySwiper {
+    padding: 8px !important;
+    background-color: {{ section.settings.background_color }};
+  }
+  .swiper-button-next1:after, .swiper-button-prev1:after{
+    font-size: 10px !important;
+    color: {{ section.settings.arrows_color }} !important;
+  }
+</style>
+
+<script>
+  var swiper = new Swiper(".mySwiper", {
+    loop: true,
+    navigation: {
+      nextEl: ".swiper-button-next1",
+      prevEl: ".swiper-button-prev1"
+    }
+  });
+</script>
+
+{% schema %}
+  {
+    "name": "Announcement",
+    "max_blocks": 3,
+    "blocks": [
+      {
+        "type": "announcement",
+        "name": "Announcement",
+        "settings": [
+          {
+            "type": "text",
+            "id": "text",
+            "default": "Welcome to our store",
+            "label": "Announcement Label"
+          }, {
+            "type": "url",
+            "id": "link",
+            "default": "/",
+            "label": "Announcement Url"
+          }
+        ]
+      }
+    ],
+    "settings": [
+      {
+        "type": "color",
+        "id": "background_color",
+        "default": "#000",
+        "label": "Background Color"
+      }, {
+        "type": "color",
+        "id": "text_color",
+        "default": "#fff",
+        "label": "Text Color"
+      },
+      {
+        "type": "color",
+        "id": "arrows_color",
+        "default": "#fff",
+        "label": "Next Prev Buttons Color"
+      }
+    ]
+  }
+{% endschema %}

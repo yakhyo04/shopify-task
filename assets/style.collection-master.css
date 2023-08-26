@@ -1,0 +1,226 @@
+.collection__list{
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    flex-wrap: wrap;
+    margin-bottom: 80px;
+    padding: 0 40px;
+    grid-gap: 16px;
+}
+.collection__item{
+    /* width: 328px;
+    height: 362px; */
+    text-align: center;
+    margin-top: 40px;
+    cursor: pointer;
+}
+.collection__icon{
+    margin-left: 10px;
+    visibility: hidden;
+}
+.collection__item:hover .collection__icon{
+    visibility: visible;
+}
+.collection__item--image{
+    width: 100%;
+}
+.collection__item--title{
+    text-decoration: none;
+    color: #000;
+    font-family: 'Oswald';
+    font-weight: 300;
+    font-size: 12px;
+    line-height: 168%;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    margin-top: 8px;
+}
+.product__list{
+    width: 80%;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-gap: 20px;
+    margin-top: 50px;
+    /* padding: 0 40px; */
+}
+.product__item{
+    position: relative;
+    font-family: 'Open Sans';
+    /* margin: 0 auto 24px auto; */
+}
+.product__image{
+    width: 100%;
+}
+.product__title{
+    text-decoration: none;
+    color: #000;
+    margin-top: 8px;
+}
+.product__money{
+    margin: 0;
+}
+.product__bestseller{
+    font-size: 12px;
+    line-height: 167.5%;
+    text-align: center;
+    color: #fff;
+    background-color: #000;
+    padding: 4px 16px;
+}
+.product__freeshipping{
+    font-size: 12px;
+    line-height: 167.5%;
+    text-align: center;
+    background-color: #fff;
+    padding: 4px 6px;
+}
+.product__span{
+    position: absolute;
+    margin: 8px 0 0 8px;
+}
+.product__preorder{
+    font-size: 12px;
+    line-height: 167.5%;
+    text-align: center;
+    padding: 4px 17px;
+    border: 1px solid #C4C4C4;
+}
+.product__sale{
+    font-size: 12px;
+    line-height: 167.5%;
+    text-align: center;
+    text-transform: uppercase;
+    color: #fff;
+    background-color: #9E0404;
+    padding: 4px 32px;
+}
+.product__heading{
+    font-size: 24px;
+    font-weight: 600;
+    line-height: 130%;
+    letter-spacing: 0.08em;
+    text-align: center;
+    margin: 60px 0 0 0;
+}
+.product__item--available{
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+.product__image--blur{
+    opacity: 0.5;
+}
+.product__item--available--span{
+    background-color: #fff;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 167.5%;
+    text-align: center;
+    color: #000;
+    padding: 4px 16px;
+    position: absolute;
+}
+.yotpo-sr-bottom-line .yotpo-sr-bottom-line-summary[data-v-549a901e]{
+    display: flex;
+    flex-wrap: wrap !important;
+}
+
+
+/* Pagination links style */
+.pagination{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 60px;
+    border: 0.5px solid #1D1D1D;
+    background-color: #f1f1f1;
+    margin-top: 50px;
+}
+.pagination__link{
+    width: 25%;
+    height: 100%;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    /* border: 1px solid #1D1D1D; */
+    padding: 0 10px;
+}
+.pagination__content{
+    width: 50%;
+    height: 100%;
+    border: 0.5px solid #1D1D1D;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    grid-gap: 40px;
+}
+.pagination__content--link{
+    width: 48px;
+    height: 48px;
+    background-color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* clip-path: polygon(50% 0%, 50% 0%, 100% 50%, 90% 100%, 50% 100%, 0% 50%); */
+    clip-path: polygon(
+      20px 0%,
+      calc(100% - 20px) 0%,
+      100% 20px,
+      100% calc(100% - 20px),
+      calc(100% - 20px) 100%,
+      20px 100%,
+      0% calc(100% - 20px),
+      0% 20px
+    );
+    text-decoration: none;
+}
+.pagination__content--number a{
+    text-decoration: none;
+    color: #000;
+}
+.pagination-active:hover{
+    opacity: 0.5;
+}
+
+
+@media (max-width: 1150px){
+    .collection__list{
+        grid-template-columns: repeat(3, 1fr);
+    }
+    .product__list{
+        width: 100%;
+    }
+}
+
+@media (max-width: 800px){
+    .collection__list{
+        grid-template-columns: repeat(2, 1fr);
+        padding: 0 24px;
+        grid-gap: 8px;
+    }
+    .product__list{
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+
+@media (max-width: 600px){
+    .product__heading{
+        font-size: 18px;
+    }
+    .pagination__content{
+        grid-gap: 20px;
+    }
+    .pagination__link{
+        font-size: 12px;
+    }
+    .pagination__content--number{
+        font-size: 14px;
+    }
+    .pagination__content--link{
+        font-size: 16px;
+    }
+}
