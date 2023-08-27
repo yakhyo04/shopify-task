@@ -87,44 +87,60 @@
     </form>
 
     <form
-  action="/cart/add"
-  method="post"
-  enctype="multipart/form-data"
-  id="productsAllForm"
-    style="margin-top: 40px;"
-  >
-  <input checked type="radio" name="quantity-radio" class="quantity-radio" value="3"> 3
-  <input type="radio" name="quantity-radio" class="quantity-radio" value="6"> 6
-  <input type="radio" name="quantity-radio" class="quantity-radio" value="12"> 12
-  <div class="products__all">
-  {% for product_item in collections.all.products %}
-    {% for variant in product_item.variants %}
-      {% for item in product.metafields.custom.sku.value %}
-        {% if item == variant.sku %}
-          <div class="product-item">
-            <input
-              type="checkbox"
-              class="products__all--input variant-id"
-              id={{ variant.id }}
-              value={{ variant.id }}
-              name={{ variant.id }}>
-            <label for={{ variant.id }}>
-              <img src={{ product_item.featured_image | img_url: 'small' }} alt="">
-            </label>
-            <input
-              type="number"
-              class="productQuantity quantity-input"
-              name="quantity"
-              value="1"
-              min="1">
-          </div>
-        {% endif %}
-      {% endfor %}
-    {% endfor %}
-  {% endfor %}
-  </div>
-  <button type="submit" id="add-to-cart-button" class="cart-drawer-button checkout-button button full accent" style="margin-top: 30px;">Add to cart</button>
-</form>
+      action="/cart/add"
+      method="post"
+      enctype="multipart/form-data"
+      id="productsAllForm"
+      style="margin-top: 40px;">
+      <input
+        checked
+        type="radio"
+        name="quantity-radio"
+        class="quantity-radio"
+        value="3"> 3
+      <input
+        type="radio"
+        name="quantity-radio"
+        class="quantity-radio"
+        value="6"> 6
+      <input
+        type="radio"
+        name="quantity-radio"
+        class="quantity-radio"
+        value="12"> 12
+      <div class="products__all">
+        {% for product_item in collections.all.products %}
+          {% for variant in product_item.variants %}
+            {% for item in product.metafields.custom.sku.value %}
+              {% if item == variant.sku %}
+                <div class="product-item">
+                  <input
+                    type="checkbox"
+                    class="products__all--input variant-id"
+                    id={{ variant.id }}
+                    value={{ variant.id }}
+                    name={{ variant.id }}>
+                  <label for={{ variant.id }}>
+                    <img src={{ product_item.featured_image | img_url: 'small' }} alt="">
+                  </label>
+                  <input
+                    type="number"
+                    class="productQuantity quantity-input"
+                    name="quantity"
+                    value="1"
+                    min="1">
+                </div>
+              {% endif %}
+            {% endfor %}
+          {% endfor %}
+        {% endfor %}
+      </div>
+      <button
+        type="submit"
+        id="add-to-cart-button"
+        class="cart-drawer-button checkout-button button full accent"
+        style="margin-top: 30px;">Add to cart</button>
+    </form>
   </div>
 </div>
 

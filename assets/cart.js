@@ -2,6 +2,33 @@ let form = document.getElementById('productsAllForm');
 let cartDrawwer = document.querySelector('.cart-drawer');
 let carts = []
 
+function getSelectedQuantity2() {
+    var radios = document.querySelectorAll(".quantity-radio");
+    for (var i = 0; i < radios.length; i++) {
+      if (radios[i].checked) {
+        return parseInt(radios[i].value, 10);
+      }
+    }
+    return null;
+  }
+
+  var selectedQuantity2 = getSelectedQuantity2();
+
+// Get all input elements with class "myCheckbox"
+const checkboxes2 = document.querySelectorAll(".products__all--input");
+
+// Iterate through the checkboxes2
+checkboxes2.forEach(checkbox => {
+    checkbox.addEventListener("change", function() {
+    const parentDiv = this.closest(".product-item");
+    if (this.checked) {
+      parentDiv.style.border = "1px solid #000"; // Change color when checkbox is checked
+    } else {
+      parentDiv.style.border = "1px solid transparent"; // Change color back when checkbox is unchecked
+    }
+  });
+});
+
 form.addEventListener('submit', (e) => {
 var productCheckboxes  = document.querySelectorAll('.variant-id');
 var quantityInputs = document.querySelectorAll('.quantity-input');

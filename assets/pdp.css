@@ -179,6 +179,9 @@
     width: 100%;
     /* display: none; */
   }
+  .product-item{
+    border: 1px solid transparent;
+  }
   .product-item:checked{
     border: 1px solid red;
   }

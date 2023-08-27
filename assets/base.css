@@ -1,6 +1,6 @@
-/* .products__all--input{
+.products__all--input{
   display: none;
-} */
+}
 .product-item{
   display: flex;
   align-items: center;
