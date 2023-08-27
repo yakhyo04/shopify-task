@@ -1,53 +1,195 @@
-{% assign selectedVariant = product.selected_or_first_available_variant %}
+{{ 'pdp.css' | asset_url | stylesheet_tag }}
+<!-- Swiper.js -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.css" />
+<!-- Swiper JS -->
+<script src="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.js"></script>
 
-<div class="product-page">
-  <div class="width">
-    <div class="product">
-      <div class="product-image">
-        <img src="{{ product.featured_image | img_url: 'master' }}">
-      </div>
+<div class="pdp__fullImage">
+  <span class="pdp__fullImage--close">
+    <img src="../assets/close-icon.svg" alt="">
+  </span>
+  {% for item in product.images %}
+    <img
+      class="pdp__fullImage--image"
+      src="{{ item.src | img_url: 'large' }}"
+      alt="{{ item.alt | escape }}">
+  {% endfor %}
+</div>
 
-      <div class="product-content">
-        <h2>{{ product.title }}</h2>
-        <p class="produce-price">{{ selectedVariant.price | money }}</p>
-
-        <div class="product-description ">
-          {{ product.description }}
-        </div>
-
-        {% form 'product', product %}
-          <label class="product-option">Options</label>
-          <select class="product-select" name="id">
-            {% for variant in product.variants %}
-              <option {% if selectedVariant.id == variant.id %}selected{% endif %}value="{{ variant.id }}">
-                {{ variant.title }}
-              </option>
-            {% endfor %}
-          </select>
-
-          <div class="product-quantity">
-            <label for="quantity">Quantity</label>
-            <input
-              name="quantity"
-              id="quantity"
-              value="1">
+<div class="product__container">
+  <div class="product__row-slider">
+    <div class="swiper swiperr productSwiper2 horyzontal__slider">
+      <div class="swiper-wrapper swiperr-wrapper">
+        {% for item in product.images %}
+          <div class="swiper-slide swiper-slide2 swiperr-slide2 swiperr-slide">
+            <img
+              class="pdp__full--image"
+              src="{{ item.src | img_url: '720x900' }}"
+              loading="lazy"
+              alt="{{ item.alt | escape }}" />
           </div>
-
-          <button class="button product-add" type="submit">Add to cart</button>
-        {% endform %}
+        {% endfor %}
+      </div>
+    </div>
+    <div class="swiper swiperr productSwiper vertical__slider">
+      <div class="swiper-wrapper swiperr-wrapper">
+        {% for item in product.images %}
+          <div class="swiper-slide swiperr-slide">
+            <img
+              src="{{ item.src | img_url: '120x200' }}"
+              loading="lazy"
+              alt="{{ item.alt | escape }}" />
+          </div>
+        {% endfor %}
       </div>
     </div>
   </div>
+
+  <div class="product__content--wrapper">
+    <h3>{{ product.title }}</h3>
+    <p>{{ product.price | money }}</p>
+    <form
+      action="/cart/add"
+      method="post"
+      enctype="multipart/form-data"
+      id="AddToCartForm">
+      <select
+        name="id"
+        id="productSelect"
+        style="width: 100%;">
+        {% for variant in product.variants %}
+          {% if variant.available %}
+            <option value="{{ variant.id }}">
+              {{ variant.title }} - {{ variant.price | money_with_currency }}
+            </option>
+          {% else %}
+            <option disabled="disabled">
+              {{ variant.title }} - sold out
+            </option>
+          {% endif %}
+        {% endfor %}
+      </select>
+      {{ current_variant.price | money }}
+      {% comment %} <label for="Quantity">quantity</label> {% endcomment %}
+      <input
+        style="width: 100%;"
+        type="number"
+        id="Quantity"
+        name="quantity"
+        value="1"
+        min="1">
+
+      <button
+        type="submit"
+        name="add"
+        class="cart-drawer-button"
+        id="AddToCart">Add to cart</button>
+    </form>
+
+    <form
+  action="/cart/add"
+  method="post"
+  enctype="multipart/form-data"
+  id="productsAllForm"
+    style="margin-top: 40px;"
+  >
+  <input checked type="radio" name="quantity-radio" class="quantity-radio" value="3"> 3
+  <input type="radio" name="quantity-radio" class="quantity-radio" value="6"> 6
+  <input type="radio" name="quantity-radio" class="quantity-radio" value="12"> 12
+  <div class="products__all">
+  {% for product_item in collections.all.products %}
+    {% for variant in product_item.variants %}
+      {% for item in product.metafields.custom.sku.value %}
+        {% if item == variant.sku %}
+          <div class="product-item">
+            <input
+              type="checkbox"
+              class="products__all--input variant-id"
+              id={{ variant.id }}
+              value={{ variant.id }}
+              name={{ variant.id }}>
+            <label for={{ variant.id }}>
+              <img src={{ product_item.featured_image | img_url: 'small' }} alt="">
+            </label>
+            <input
+              type="number"
+              class="productQuantity quantity-input"
+              name="quantity"
+              value="1"
+              min="1">
+          </div>
+        {% endif %}
+      {% endfor %}
+    {% endfor %}
+  {% endfor %}
+  </div>
+  <button type="submit" id="add-to-cart-button" class="cart-drawer-button checkout-button button full accent" style="margin-top: 30px;">Add to cart</button>
+</form>
+  </div>
 </div>
 
-{% schema %}
-  {
-    "name": "Main product",
-    "settings": [],
-    "presets": [
-      {
-        "name": "Main product"
+{{ 'cart.js' | asset_url | script_tag }}
+
+<script>
+
+
+  var swiper = new Swiper(".productSwiper", {
+    spaceBetween: 10,
+    slidesPerView: 3,
+
+// loop: true,
+    direction: "vertical"
+  });
+  var swiper2 = new Swiper(".productSwiper2", {
+    spaceBetween: 10,
+    effect: "cube",
+    pagination: {
+      el: ".swiper-pagination",
+      dynamicBullets: true
+    },
+    cubeEffect: {
+      shadow: false,
+      slideShadows: false
+    },
+
+// loop: true,  
+    navigation: {
+      nextEl: ".swiperr-button-next",
+      prevEl: ".swiperr-button-prev"
+    },
+    thumbs: {
+      swiper: swiper
+    }
+  });
+
+
+
+  const opt = {
+    style: 'currency',
+    currency: 'USD'
+  };
+  const select = document.querySelector('.pdp__select');
+  const options = document.querySelectorAll('.pdp__option');
+  const productTitle = document.querySelector('.pdp__title');
+  const productPrice = document.querySelector('.pdp__price');
+
+
+
+  console.log(options);
+
+  select.addEventListener('change', (e) => {
+    const productVariants = {{ product.variants | json }};
+    productVariants.forEach(variant => {
+      if (variant.id == e.target.value) {
+        productTitle.innerText = variant.name
+          ? variant.name
+          : "{{ product.title }}"
+        const varaintPrice = new Intl.NumberFormat('en-US', opt).format(variant.price / 100);
+        productPrice.innerText = `${varaintPrice}`
       }
-    ]
-  }
-{% endschema %}
+    })
+  })
+
+  const variantId = document.querySelector(".product-variants__list").value;
+  console.log(variantId);
+</script>
