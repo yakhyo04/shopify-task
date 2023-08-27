@@ -1,0 +1,80 @@
+<style>
+  #more {
+    display: none;
+  }
+  .row {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding-bottom: 50px;
+  }
+</style>
+
+<div class="row">
+  <h2>{{ section.settings.heading }}</h2>
+  <p>{{ section.settings.description }}<span id="dots">...</span>
+    <span id="more">{{ section.settings.second_description }}</span>
+  </p>
+  <button onclick="myFunction()" id="myBtn">{{ section.settings.read_more }}</button>
+</div>
+
+
+<script>
+  function myFunction() {
+    var dots = document.getElementById("dots");
+    var moreText = document.getElementById("more");
+    var btnText = document.getElementById("myBtn");
+
+    if (dots.style.display === "none") {
+      dots.style.display = "inline";
+      btnText.innerHTML = "Read more";
+      moreText.style.display = "none";
+    } else {
+      dots.style.display = "none";
+      btnText.innerHTML = "Read less";
+      moreText.style.display = "inline";
+    }
+  }
+</script>
+
+{% schema %}
+  {
+    "name": "Text-readmore",
+    "settings": [
+      {
+        "type": "text",
+        "id": "heading",
+        "default": "Heading",
+        "label": "Title"
+      },
+      {
+        "type": "text",
+        "id": "description",
+        "default": "Description",
+        "label": "Description"
+      },
+      {
+        "type": "text",
+        "id": "second_description",
+        "default": "Description",
+        "label": "Second description"
+      },
+      {
+        "type": "text",
+        "id": "read_more",
+        "default": "Read more",
+        "label": "Read more"
+      }, {
+        "type": "text",
+        "id": "read_less",
+        "default": "Read less",
+        "label": "Read less"
+      }
+    ],
+    "presets": [
+      {
+        "name": "Text-more"
+      }
+    ]
+  }
+{% endschema %}

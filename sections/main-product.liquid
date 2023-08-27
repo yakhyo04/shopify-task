@@ -86,30 +86,40 @@
         id="AddToCart">Add to cart</button>
     </form>
 
+    {% if product.metafields.custom.related == 'bundle' %}
     <form
       action="/cart/add"
       method="post"
       enctype="multipart/form-data"
       id="productsAllForm"
       style="margin-top: 40px;">
-      <input
-        checked
-        type="radio"
-        name="quantity-radio"
-        class="quantity-radio"
-        value="3"> 3
-      <input
-        type="radio"
-        name="quantity-radio"
-        class="quantity-radio"
-        value="6"> 6
-      <input
-        type="radio"
-        name="quantity-radio"
-        class="quantity-radio"
-        value="12"> 12
+      <div class="product__radios">
+        <input
+          checked
+          type="radio"
+          name="quantity-radio"
+          class="quantity-radio"
+          id="quantity-radio"
+          value="3">
+        <label for="quantity-radio">3</label>
+        <input
+          type="radio"
+          name="quantity-radio"
+          class="quantity-radio"
+          id="quantity-radio2"
+          value="6">
+          <label for="quantity-radio2">6</label>
+        <input
+          type="radio"
+          name="quantity-radio"
+          class="quantity-radio"
+          id="quantity-radio3"
+          value="12">
+          <label for="quantity-radio3">12</label>
+      </div>
       <div class="products__all">
         {% for product_item in collections.all.products %}
+          {% if product_item.available %}
           {% for variant in product_item.variants %}
             {% for item in product.metafields.custom.sku.value %}
               {% if item == variant.sku %}
@@ -118,6 +128,7 @@
                     type="checkbox"
                     class="products__all--input variant-id"
                     id={{ variant.id }}
+                    id="productCheckbox2"
                     value={{ variant.id }}
                     name={{ variant.id }}>
                   <label for={{ variant.id }}>
@@ -133,6 +144,7 @@
               {% endif %}
             {% endfor %}
           {% endfor %}
+        {% endif %}
         {% endfor %}
       </div>
       <button
@@ -141,6 +153,7 @@
         class="cart-drawer-button checkout-button button full accent"
         style="margin-top: 30px;">Add to cart</button>
     </form>
+      {% endif %}
   </div>
 </div>
 

@@ -1,0 +1,122 @@
+{{ 'style.richtext.css' | asset_url | stylesheet_tag }}
+
+<div class="richtext">
+  <div class="row">
+    <div class="richtext__wrapper">
+      <div class="richtext__left">
+        <h3 class="richtext__title">
+          <span class="richtext__colored--title">{{ section.settings.colored_title }}</span> 
+          {{ section.settings.title }}
+        </h3>
+        <p class="richtext__description">{{ section.settings.description }}</p>
+        <a class="richtext__link" href={{ section.settings.link_url }}>
+          {{ section.settings.link_title }}
+          {% render 'icon-right' %}
+        </a>
+        {% if section.settings.logo %}
+          <img class="richtext__logo" src={{ section.settings.logo | img_url: 'large' }} />
+        {% endif %}
+      </div>
+      <div class="richtext__right">
+        {% if section.settings.image %}
+          <img class="richtext__image" src={{ section.settings.image | img_url: 'large' }} />
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .richtext{
+    background-color: {{ section.settings.background }};
+  }
+  .richtext__wrapper{
+    background-color: {{ section.settings.wrapper_background }}
+  }
+  .richtext__colored--title{
+    color: {{ section.settings.title_color }}
+  }
+  .richtext__link{
+    color: {{ section.settings.link_color }};
+  }
+  .richtext__link svg{
+    fill: {{ section.settings.link_color }} !important;
+  }
+</style>
+
+{% schema %}
+  {
+    "name": "Section Richtext",
+    "settings": [
+      {
+        "type": "text",
+        "id": "colored_title",
+        "default": "Colored title",
+        "label": "Colored title"
+      },
+      {
+        "type": "color",
+        "id": "title_color",
+        "default": "#ccc",
+        "label": "Color"
+      },
+      {
+        "type": "text",
+        "id": "title",
+        "default": "Title",
+        "label": "Title"
+      },
+      {
+        "type": "text",
+        "id": "description",
+        "default": "Description",
+        "label": "Description"
+      },
+      {
+        "type": "text",
+        "id": "link_title",
+        "default": "Link title",
+        "label": "Link Title"
+      },
+      {
+        "type": "color",
+        "id": "link_color",
+        "default": "#000",
+        "label": "Link color"
+      },
+      {
+        "type": "url",
+        "id": "link_url",
+        "default": "/",
+        "label": "Link url"
+      },
+      {
+        "type": "image_picker",
+        "id": "image",
+        "label": "Image"
+      },
+      {
+        "type": "image_picker",
+        "id": "logo",
+        "label": "Logo"
+      },
+      {
+        "type": "color",
+        "id": "background",
+        "default": "#fff",
+        "label": "Main background color"
+      },
+      {
+        "type": "color",
+        "id": "wrapper_background",
+        "default": "#fff",
+        "label": "Wrapper background color"
+      }
+    ],
+    "presets": [
+      {
+        "name": "Section-richtext"
+      }
+    ]
+  }
+{% endschema %}

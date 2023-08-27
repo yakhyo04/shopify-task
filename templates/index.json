@@ -1,0 +1,16 @@
+{
+  "sections": {
+    "product-block": {
+      "type": "product-block",
+      "settings": {}
+    },
+    "brands": {
+      "type": "brands",
+      "settings": {}
+    }
+  },
+  "order": [
+    "product-block",
+    "brands"
+  ]
+}
