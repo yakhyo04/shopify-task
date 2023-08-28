@@ -3,6 +3,17 @@ let cartDrawwer = document.querySelector('.cart-drawer');
 const checkboxes = document.querySelectorAll(".variant-id");
 let totalCount = 0;
 let countInputs = document.querySelectorAll('.quantity-input');
+console.log(countInputs.length)
+
+function openCartDrawer() {
+    document.querySelector(".cart-drawer").classList.add("cart-drawer--active");
+  }
+  
+function closeCartDrawer() {
+    document
+    .querySelector(".cart-drawer")
+    .classList.remove("cart-drawer--active");
+}
 
 checkboxes.forEach((checkbox, index) => {
     checkbox.addEventListener("change", function() {
@@ -71,6 +82,7 @@ form.addEventListener('submit', (e) => {
             console.error('Error:', error);
             });
     } else {
-        alert("Please select 3, 6, or 12 products.");
+        closeCartDrawer()
+        alert("Please select 3, 6, or 12 products.")
     }
 })
