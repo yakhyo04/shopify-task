@@ -96,12 +96,16 @@ function openCartDrawer() {
       const res = await fetch("/cart.js");
       const cart = await res.json();
       updateCartItemCounts(cart.item_count);
-  
+
       // Update cart
       await updateCartDrawer();
   
       // Open cart drawer
-      openCartDrawer();
+      if(cart.item_count){
+        openCartDrawer();
+      }else{
+        closeCartDrawer();
+      }
     });
   });
   
