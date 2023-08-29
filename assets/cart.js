@@ -15,6 +15,25 @@ function closeCartDrawer() {
     .classList.remove("cart-drawer--active");
 }
 
+function maxQuantity() {
+    let radios = document.querySelectorAll(".quantity-radio");
+    for (let i = 0; i < radios.length; i++) {
+    if (radios[i].checked) {
+        return parseInt(radios[i].value, 10);
+    }
+    }
+    return null;
+}
+
+let checks = document.querySelectorAll(".variant-id");
+for (let i = 0; i < checks.length; i++)
+  checks[i].onclick = selectiveCheck;
+function selectiveCheck (event) {
+  let checkedChecks = document.querySelectorAll(".variant-id:checked");
+  if (checkedChecks.length >= maxQuantity() + 1)
+    return false;
+}
+
 checkboxes.forEach((checkbox, index) => {
     checkbox.addEventListener("change", function() {
         
